@@ -3,11 +3,9 @@
 import * as vscode from 'vscode';
 
 export function activate(context: vscode.ExtensionContext) {
-	// A `CommentController` is able to provide comments for documents.
 	const commentController = vscode.comments.createCommentController('comment-sample', 'Comment API Sample');
 	context.subscriptions.push(commentController);
 
-	// A `CommentingRangeProvider` controls where gutter decorations that allow adding comments are shown
 	commentController.commentingRangeProvider = {
 		provideCommentingRanges: (document: vscode.TextDocument, token: vscode.CancellationToken) => {
 			const lineCount = document.lineCount;
@@ -29,13 +27,9 @@ export function activate(context: vscode.ExtensionContext) {
 	
 
 	function buildDemoComments(comment: any) {
-		const activeFsPath = vscode.window.activeTextEditor?.document?.uri?.fsPath;
-		console.log('activaFSPath:', activeFsPath);
 		const { lineStart, lineEnd, body } = comment;
-		console.log(vscode.window.activeTextEditor?.document);
 		const newThread = commentController.createCommentThread(
-			// vscode.window.activeTextEditor?.document,
-			vscode.Uri.parse(activeFsPath || ''),
+			vscode.window.activeTextEditor?.document?.uri as vscode.Uri,
 			new vscode.Range(
 				new vscode.Position(lineStart, 0),
 				new vscode.Position(lineEnd, 0),
